@@ -31,7 +31,7 @@ export default function Page() {
                   <div className="mt-4 text-center text-sm">
                     have an account?{" "}
                     <a
-                      href="/auth/login"
+                      href="/account/login"
                       className="underline underline-offset-4"
                     >
                       Logn In
@@ -48,7 +48,7 @@ export default function Page() {
                   <div className="mt-4 text-center text-sm">
                     Don&apos;t have an account?{" "}
                     <a
-                      href="/auth/signup"
+                      href="/account/signup"
                       className="underline underline-offset-4"
                     >
                       Sign up
