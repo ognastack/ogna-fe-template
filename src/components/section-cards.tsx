@@ -16,13 +16,13 @@ import { type Check } from "@/types/checks";
 import { toast } from "sonner";
 
 export function SectionCards() {
-  const auth = useAuth();
+  const { client } = useAuth();
 
   const [check, setCheck] = useState<Check>();
 
   useEffect(() => {
     async function fetchData() {
-      const response = await auth.client.get("v1/check/");
+      const response = await client.get("v1/check/");
       if (response.data) {
         setCheck(response.data as Check);
       } else if (response.error) {
@@ -30,7 +30,7 @@ export function SectionCards() {
       }
     }
     fetchData();
-  }, [auth.client]);
+  }, [client]);
   return (
     <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
       <Card className="@container/card">

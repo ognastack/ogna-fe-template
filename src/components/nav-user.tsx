@@ -25,6 +25,8 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { useAuth } from "@/api/OgnaContext";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export function NavUser({
   user,
@@ -36,7 +38,18 @@ export function NavUser({
   };
 }) {
   const { isMobile } = useSidebar();
-  const auth = useAuth();
+  const { client } = useAuth();
+  const router = useRouter();
+
+  const manageLogut = async () => {
+    const response = await client.auth.logout();
+    if (response.error) {
+      toast(response.error.msg);
+    } else {
+      router.push("/");
+    }
+  };
+
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -52,7 +65,7 @@ export function NavUser({
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="text-muted-foreground truncate text-xs">
-                  {auth.session?.user.email}
+                  {user.email}
                 </span>
               </div>
               <IconDotsVertical className="ml-auto size-4" />
@@ -73,7 +86,7 @@ export function NavUser({
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">{user.name}</span>
                   <span className="text-muted-foreground truncate text-xs">
-                    {auth.session?.user.email}
+                    {user.email}
                   </span>
                 </div>
               </div>
@@ -94,7 +107,7 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={manageLogut}>
               <IconLogout />
               Log out
             </DropdownMenuItem>

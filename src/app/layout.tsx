@@ -25,10 +25,10 @@ export default function RootLayout({
 }>) {
   const client = useMemo(() => new OgnaClient("http://localhost:8000"), []);
 
-  const [session, setSession] = useState<Session | null>(client.getSession());
+  const [session, setSession] = useState<Session | null>(client.auth.session);
 
   const updateSession = (s: Session | null) => {
-    client.setSession(s);
+    client.auth.setSession(s);
     setSession(s);
   };
 

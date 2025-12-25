@@ -44,7 +44,7 @@ export function LoginForm({
   });
 
   const onSubmit = async (values: z.infer<typeof signUpFormSchema>) => {
-    const response = await client.login(values.username, values.password);
+    const response = await client.auth.login(values.username, values.password);
     if (response.error) {
       toast(response.error.msg);
     } else {
@@ -103,7 +103,7 @@ export function LoginForm({
               </div>
               <div className="mt-4 text-center text-sm">
                 Don&apos;t have an account?{" "}
-                <a href="#" className="underline underline-offset-4">
+                <a href="/auth/signup" className="underline underline-offset-4">
                   Sign up
                 </a>
               </div>

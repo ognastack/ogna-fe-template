@@ -46,7 +46,7 @@ export function SignUpForm({
   });
 
   const onSubmit = async (values: z.infer<typeof signUpFormSchema>) => {
-    const response = await client.signup(values.username, values.password);
+    const response = await client.auth.signup(values.username, values.password);
     if (response.error) {
       toast(response.error.msg);
     } else {
