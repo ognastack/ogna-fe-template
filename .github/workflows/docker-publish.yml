@@ -1,9 +1,8 @@
-name: Build and Publish Docker Image
+name: Build and Publish Multi-Arch Docker Image
 
 on:
   push:
     branches: ["main"]
-    # Publish semver tags as releases, e.g., v1.0.1
     tags: ["v*.*.*"]
   pull_request:
     branches: ["main"]
@@ -22,6 +21,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      # Required for multi-platform builds
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -49,6 +52,8 @@ jobs:
         with:
           context: .
           push: ${{ github.event_name != 'pull_request' }}
+          # Define both AMD and ARM architectures here
+          platforms: linux/amd64,linux/arm64
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
