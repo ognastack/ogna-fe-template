@@ -2,13 +2,11 @@
 
 import { createContext, useContext } from "react";
 
-import { OgnaClient, Session } from "@/api/OgnaClient";
+// import { OgnaClient, Session } from "@/api/OgnaClient";
+import { OgnaClient } from '@ogna/js';
 
-export const OgnaContext = createContext<{
-  client: OgnaClient;
-  session: Session | null;
-  setSession: (s: Session | null) => void;
-} | null>(null);
+export const OgnaContext = createContext<OgnaClient | undefined>(undefined);
+
 
 export const useAuth = () => {
   const ctx = useContext(OgnaContext);

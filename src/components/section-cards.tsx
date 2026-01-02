@@ -16,7 +16,7 @@ import { type Check } from "@/types/checks";
 import { toast } from "sonner";
 
 export function SectionCards() {
-  const { client } = useAuth();
+  const client  = useAuth();
 
   const [check, setCheck] = useState<Check>();
 

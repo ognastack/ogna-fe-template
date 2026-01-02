@@ -38,7 +38,7 @@ export function NavUser({
   };
 }) {
   const { isMobile } = useSidebar();
-  const { client } = useAuth();
+  const client  = useAuth();
   const router = useRouter();
 
   const manageLogut = async () => {

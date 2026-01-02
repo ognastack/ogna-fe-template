@@ -2,8 +2,8 @@
 
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
-import React, { useMemo, useState } from "react";
-import { OgnaClient, Session } from "@/api/OgnaClient";
+import React, { useMemo } from "react";
+import { OgnaClient } from '@ogna/js';
 
 import "./globals.css";
 import { OgnaContext } from "@/api/OgnaContext";
@@ -25,21 +25,13 @@ export default function RootLayout({
 }>) {
   const client = useMemo(() => new OgnaClient("http://localhost:8000"), []);
 
-  const [session, setSession] = useState<Session | null>(client.auth.session);
-
-  const updateSession = (s: Session | null) => {
-    client.auth.setSession(s);
-    setSession(s);
-  };
 
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <OgnaContext.Provider
-          value={{ client, session, setSession: updateSession }}
-        >
+        <OgnaContext.Provider value={client}>
           {children}
         </OgnaContext.Provider>
         <Toaster />
