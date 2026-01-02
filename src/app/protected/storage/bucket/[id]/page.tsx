@@ -29,7 +29,7 @@ const UploadFile = ({ onCreate, bucketName }: UploadFileProps) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [open, setOpen] = useState(false);
-  const { client } = useAuth();
+  const client = useAuth();
 
   const handleUploadFile = async () => {
     // 2. Validation check for the file object
@@ -101,7 +101,7 @@ const UploadFile = ({ onCreate, bucketName }: UploadFileProps) => {
 const ViewBucketPage = ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = use(params);
   const [bucketObjs, setBucketObjs] = useState<FileObj[]>([]);
-  const { client } = useAuth();
+  const client = useAuth();
 
   const fetchObjects = useCallback(async () => {
     if (id) {

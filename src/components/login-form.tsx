@@ -32,7 +32,7 @@ export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  const { client } = useAuth();
+  const client  = useAuth();
   const router = useRouter();
 
   const form = useForm<z.infer<typeof signUpFormSchema>>({

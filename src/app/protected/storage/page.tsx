@@ -25,7 +25,7 @@ type CreateBucketProps = {
 const CreateBucket = ({ onCreate }: CreateBucketProps) => {
   const [bucketName, setBucketName] = useState("");
   const [open, setOpen] = useState(false);
-  const { client } = useAuth();
+  const client  = useAuth();
   const handleCreateBucket = async () => {
     if (!bucketName) {
       toast.error("Please enter a bucket name");
@@ -77,7 +77,7 @@ const CreateBucket = ({ onCreate }: CreateBucketProps) => {
 };
 
 const StoragePage = () => {
-  const { client } = useAuth();
+  const client  = useAuth();
   const [buckets, setBuckets] = useState<Bucket[]>([]);
   const router = useRouter();
 

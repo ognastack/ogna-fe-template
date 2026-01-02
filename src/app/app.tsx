@@ -1,22 +1,13 @@
 import React, {
-  createContext,
   PropsWithChildren,
-  useContext,
   useMemo,
 } from "react";
-import { OgnaClient } from "@/api/OgnaClient";
+import { OgnaClient } from '@ogna/js';
+import { OgnaContext } from "@/api/OgnaContext";
+
 import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
-const OgnaContext = createContext<OgnaClient | undefined>(undefined);
-
-export const useAuth = (): OgnaClient => {
-  const ctx = useContext(OgnaContext);
-  if (!ctx) {
-    throw new Error("OgnaContext must be used within an AuthProvider");
-  }
-  return ctx;
-};
 
 type OgnaAppProps = {
   baseUrl: string;
