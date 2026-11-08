@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -7,48 +8,23 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { useRouter } from "next/navigation";
 import { useAuth } from "@/api/OgnaContext";
-
-const signUpFormSchema = z.object({
-  username: z.email(),
-  password: z.string().min(6).max(100),
-});
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  const client  = useAuth();
-  const router = useRouter();
+  const client = useAuth();
+  const [busy, setBusy] = useState(false);
 
-  const form = useForm<z.infer<typeof signUpFormSchema>>({
-    resolver: zodResolver(signUpFormSchema),
-    defaultValues: {
-      username: "",
-      password: "",
-    },
-  });
-
-  const onSubmit = async (values: z.infer<typeof signUpFormSchema>) => {
-    const response = await client.auth.login(values.username, values.password);
-    if (response.error) {
-      toast(response.error.msg);
-    } else {
-      router.push("/protected");
+  const signIn = async () => {
+    setBusy(true);
+    try {
+      await client.auth.signInWithRedirect({ returnTo: "/protected" });
+    } catch (err) {
+      setBusy(false);
+      toast(err instanceof Error ? err.message : "Could not start sign-in");
     }
   };
 
@@ -58,60 +34,21 @@ export function LoginForm({
         <CardHeader>
           <CardTitle>Login to your account</CardTitle>
           <CardDescription>
-            Enter your email below to login to your account
+            You will be redirected to the secure sign-in page.
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              <div className="flex flex-col gap-6">
-                <FormField
-                  control={form.control}
-                  name="username"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Username</FormLabel>
-                      <FormControl>
-                        <Input placeholder="@example.com" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Username</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="shadcn"
-                          {...field}
-                          type="password"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <div className="flex flex-col gap-3">
-                  <Button type="submit" className="w-full">
-                    Login
-                  </Button>
-                </div>
-              </div>
-              <div className="mt-4 text-center text-sm">
-                Don&apos;t have an account?{" "}
-                <a
-                  href="/account/signup"
-                  className="underline underline-offset-4"
-                >
-                  Sign up
-                </a>
-              </div>
-            </form>
-          </Form>
+          <div className="flex flex-col gap-6">
+            <Button className="w-full" onClick={signIn} disabled={busy}>
+              {busy ? "Redirecting…" : "Sign in"}
+            </Button>
+            <div className="text-center text-sm">
+              Don&apos;t have an account?{" "}
+              <a href="/account/signup" className="underline underline-offset-4">
+                Sign up
+              </a>
+            </div>
+          </div>
         </CardContent>
       </Card>
     </div>

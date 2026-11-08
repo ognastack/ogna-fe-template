@@ -1,3 +1,35 @@
+# OGNA dashboard template
+
+Next.js dashboard for [OGNA core](https://github.com/ognastack/core), using [`@ogna/js`](https://github.com/ognastack/ogna-js).
+
+## Authentication
+
+Users sign in on OGNA's identity provider (Zitadel) with OpenID Connect. The app never sees passwords:
+
+- `/account/login` and `/account/signup` send the user to the hosted login or registration page (`auth.signInWithRedirect` / `auth.signUpWithRedirect`).
+- `/auth/callback` finishes sign-in (`auth.handleRedirectCallback`) and continues to `/protected`. This URL must be in core's `OGNA_OIDC_REDIRECT_URIS` (the defaults include `http://localhost:8000/auth/callback` and `http://localhost:3000/auth/callback`).
+- Logging out revokes the tokens and ends the identity-provider session.
+- `middleware.ts` keeps `/protected/*` behind the `ogna_token` cookie that `@ogna/js` sets (the gateway still checks every API call).
+
+### Configuration (runtime, no rebuild needed)
+
+The browser loads its settings from `GET /ogna-config`:
+
+| Setting | Source |
+|---------|--------|
+| `issuer`, `clientId` | `OGNA_AUTH_URL` / `OGNA_CLIENT_ID` env vars, or the `web-client.json` that core's `zitadel-setup` writes (`OGNA_WEB_CLIENT_FILE`, default `/zitadel/public/web-client.json`; core mounts it automatically) |
+| `apiUrl` | `OGNA_API_URL`, default: same origin as the page (the dashboard is served through the gateway) |
+
+For local development against a running core stack:
+
+```bash
+# Values from `make auth-info` in ogna core
+OGNA_AUTH_URL=http://auth.localhost:8000 \
+OGNA_CLIENT_ID=<ogna-web client id> \
+OGNA_API_URL=http://localhost:8000 \
+npm run dev
+```
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started

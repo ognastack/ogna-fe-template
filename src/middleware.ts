@@ -10,7 +10,7 @@ export function middleware(req: NextRequest) {
 
   // If the user tries to access /protected/* without a token, redirect to login
   if (!token && req.nextUrl.pathname.startsWith("/protected")) {
-    return NextResponse.redirect(new URL("/auth/login", req.url));
+    return NextResponse.redirect(new URL("/account/login", req.url));
   }
 
   // Otherwise, continue

@@ -2,11 +2,10 @@
 
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
-import React, { useMemo } from "react";
-import { OgnaClient } from '@ogna/js';
+import React from "react";
 
 import "./globals.css";
-import { OgnaContext } from "@/api/OgnaContext";
+import { OgnaProvider } from "@/api/OgnaContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,17 +22,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const client = useMemo(() => new OgnaClient("http://localhost:8000"), []);
-
 
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <OgnaContext.Provider value={client}>
-          {children}
-        </OgnaContext.Provider>
+        <OgnaProvider>{children}</OgnaProvider>
         <Toaster />
       </body>
     </html>
