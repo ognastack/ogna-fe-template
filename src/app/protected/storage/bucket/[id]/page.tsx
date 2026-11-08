@@ -108,9 +108,10 @@ const ViewBucketPage = ({ params }: { params: Promise<{ id: string }> }) => {
       try {
         const { data, error } = await client.storage.listFiles(id);
         if (error) throw error;
-        setBucketObjs(data as FileObj[]);
+        setBucketObjs(Array.isArray(data) ? data : []);
       } catch (err) {
         console.error("Error fetching buckets:", err);
+        setBucketObjs([]);
       }
     }
   }, [id, client]);
