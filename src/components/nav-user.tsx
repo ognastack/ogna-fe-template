@@ -41,11 +41,22 @@ export function NavUser({
   const client  = useAuth();
   const router = useRouter();
 
+  // Prefer the signed-in user's claims over the placeholder props
+  const signedIn = client.user;
+  if (signedIn) {
+    user = {
+      name: signedIn.name ?? signedIn.preferred_username ?? signedIn.email ?? user.name,
+      email: signedIn.email ?? user.email,
+      avatar: signedIn.picture ?? user.avatar,
+    };
+  }
+
   const manageLogut = async () => {
+    // Revokes the tokens and redirects to the identity provider to end its session,
+    // which then returns to "/".
     const response = await client.auth.logout();
     if (response.error) {
       toast(response.error.msg);
-    } else {
       router.push("/");
     }
   };
