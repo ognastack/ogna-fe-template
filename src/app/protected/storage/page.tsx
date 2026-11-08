@@ -85,9 +85,10 @@ const StoragePage = () => {
     try {
       const { data, error } = await client.storage.listBuckets();
       if (error) throw error;
-      setBuckets(data as Bucket[]);
+      setBuckets(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error("Error fetching buckets:", err);
+      setBuckets([]);
     }
   }, [client]);
 
